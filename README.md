@@ -4,10 +4,10 @@
 
 ## 📦 已复现模型库 (Model Zoo)
 
-| 模型名称 | 所属子模块 | 论文原标题 | 作者团队 | 发表日期/出处 | 链接 | 2D简单测试 | 2D中等测试 | 3D简单测试 | 3D中等测试 |
-| :--- | :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :---: |
-| **U-Net** | `models.segmentors` | *U-Net: Convolutional Networks for Biomedical Image Segmentation* | Olaf Ronneberger, Philipp Fischer, Thomas Brox (University of Freiburg) | 2015-05 (MICCAI) | [arXiv:1505.04597](https://arxiv.org/abs/1505.04597) | ✅ | ✅ | / | / |
-| **UNet++** | `models.segmentors` | *UNet++: A Nested U-Net Architecture for Medical Image Segmentation* | Zongwei Zhou, Md Mahfuzur Rahman Siddiquee, Nima Tajbakhsh, Jianming Liang (Arizona State University) | 2018-07 (DLMIA) | [arXiv:1807.10165](https://arxiv.org/abs/1807.10165) | ✅ | ✅ | / | / |
+| 模型名称 | 论文原标题 | 发表日期/出处 | 链接 | 2D简单测试 | 2D中等测试 | 3D简单测试 | 3D中等测试 |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :---: |
+| **U-Net** | *U-Net: Convolutional Networks for Biomedical Image Segmentation* | 2015-05 (MICCAI) | [arXiv:1505.04597](https://arxiv.org/abs/1505.04597) | Dice=0.7487 (E48) | ✅ | / | / |
+| **UNet++** | *UNet++: A Nested U-Net Architecture for Medical Image Segmentation* | 2018-07 (DLMIA) | [arXiv:1807.10165](https://arxiv.org/abs/1807.10165) | ✅ | ✅ | / | / |
 
 - 2D简单测试使用 **DRIVE**，图像统一 `resize` 到 `512`。
 - 2D中等测试使用 **Kvasir-SEG**，图像统一 `resize` 到 `352`。
