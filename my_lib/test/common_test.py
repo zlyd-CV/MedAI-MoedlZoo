@@ -42,6 +42,50 @@ def resolve_device(device: str) -> torch.device:
     return torch.device(device)
 
 
+def profile_model(model: torch.nn.Module, input_shape: Tuple[int, ...], device: str = "cpu") -> Dict[str, object]:
+    """使用 torchinfo 统计参数量与 Mult-Adds。"""
+    try:
+        from torchinfo import summary
+    except ImportError as exc:  # pragma: no cover
+        raise ImportError("请先安装 torchinfo: pip install torchinfo") from exc
+
+    stats = summary(model, input_size=input_shape, device=device, verbose=0)
+    total_params = int(getattr(stats, "total_params", 0))
+    total_mult_adds = int(getattr(stats, "total_mult_adds", 0))
+
+    return {
+        "input_shape": input_shape,
+        "total_params": total_params,
+        "total_mult_adds": total_mult_adds,
+        "params_m": total_params / 1e6,
+        "mult_adds_g": total_mult_adds / 1e9,
+    }
+
+
+def run_model_sanity_and_profile(
+    model: torch.nn.Module,
+    input_shape: Tuple[int, ...],
+    device: str = "cuda",
+) -> Dict[str, object]:
+    """统一执行：前向可用性检查 + torchinfo 模型统计。"""
+    dev = resolve_device(device)
+    model = model.to(dev).eval()
+
+    x = torch.randn(*input_shape, device=dev)
+    with torch.no_grad():
+        y = model(x)
+
+    output_shape = tuple(y[-1].shape) if isinstance(y, list) else tuple(y.shape)
+    profile = profile_model(model, input_shape=input_shape, device=str(dev))
+
+    return {
+        "ok": True,
+        "input_shape": tuple(x.shape),
+        "output_shape": output_shape,
+        "profile": profile,
+    }
+
+
 def _read_2d_image(path: Path, is_mask: bool) -> torch.Tensor:
     img = Image.open(path)
     img = img.convert("L") if is_mask else img.convert("RGB")
